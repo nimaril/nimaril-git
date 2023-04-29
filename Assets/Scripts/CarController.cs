@@ -6,7 +6,7 @@ public class CarController : MonoBehaviour
 {
     public WheelCollider[] wheel_col;
     public Transform[] wheels;
-    float torque = 100;
+    float torque = 400;
     float angle = 45;
 
     void Update()
