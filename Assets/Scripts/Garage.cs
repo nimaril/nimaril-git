@@ -9,4 +9,9 @@ public class Garage : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public void ChangeColor(int color)
+    {
+        
+    }
 }
