@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +10,7 @@ public class Main : MonoBehaviour
     bool isMute = false;
     public Material[] mats;
     public GameObject car;
-    public float tasksCreationRate = 2f;  // MAKE LONGER!!!
+    public float tasksCreationRate = 4f;  // MAKE LONGER!!!
     public bool hasTask = false;
     public bool isTaskTaken = false;
     public int task = 0;
@@ -20,13 +21,67 @@ public class Main : MonoBehaviour
     public GameObject[] QuestResults;
     public GameObject[] Packages;
     public bool isPackageTaken = false;
+    public GameObject timerGO;
+    public GameObject moneyGO;
+    private IEnumerator _timerCoroutine;
+    private int _timer;
+    public Action OnTimeOut;
+    public int[] moneyRewards = { 25, 25, 20, 15, 10 };
 
     public void Start()
     {
         int carColor = PlayerPrefs.GetInt("CarColor", 0);
         car.GetComponent<MeshRenderer>().material = mats[carColor];
         StartCoroutine(CreateTask());
+        
+        int money = PlayerPrefs.GetInt("Money", 0);
+        moneyGO.GetComponent<TMP_Text>().text = money.ToString();
     }
+
+    private void SetTimeText(int seconds)
+    {
+        timerGO.GetComponent<TMP_Text>().text = (_timer / 60).ToString() + ':' + (_timer % 60).ToString();
+    }
+    
+    private void StartTimer(int totalTime, Action timeOut)
+    {
+        OnTimeOut = timeOut;
+        //reset the timer at the start
+        _timer = totalTime;
+        _timerCoroutine = StartTimer(totalTime);
+        StartCoroutine(_timerCoroutine);
+    }
+    
+    public void StopTimer()
+    {
+        if (_timerCoroutine != null)
+        {
+            StopCoroutine(_timerCoroutine);
+            _timerCoroutine = null;
+            OnTimeOut = null;
+        }
+    }
+    
+    private void TimeOut()
+    {
+        ShowFailure();
+    }
+    
+    private IEnumerator StartTimer(int totalTime)
+    {
+        while (_timer > 0)
+        {
+            //waiting 1 second in real time and decreasing the timer value
+            yield return new WaitForSecondsRealtime(1);
+            _timer--;
+            SetTimeText(_timer);
+            Debug.Log("Timer is : " + _timer);
+        }
+
+        //trigger the timeout action to inform that the time is up.
+        OnTimeOut?.Invoke();
+    }
+
     
     public void LoadSettings()
     {
@@ -72,6 +127,7 @@ public class Main : MonoBehaviour
         Quests[task].transform.GetChild(6).gameObject.SetActive(false);
         CloseTask();
         Packages[task].SetActive(true);
+        StartTimer(61, TimeOut);
     }
 
     public void RefuseTask()
@@ -106,8 +162,8 @@ public class Main : MonoBehaviour
 
     public void CloseFailure()
     {
-        QuestResults[5].SetActive(true);
-        QuestResultsGO.SetActive(true);
+        QuestResults[5].SetActive(false);
+        QuestResultsGO.SetActive(false);
         QuestIcon.SetActive(false);
         StartCoroutine(CreateTask());
     }
@@ -120,5 +176,10 @@ public class Main : MonoBehaviour
         QuestResultsGO.SetActive(false);
         QuestResults[task].SetActive(false);
         StartCoroutine(CreateTask());
+        int money = PlayerPrefs.GetInt("Money", 0);
+        money += moneyRewards[task];
+        PlayerPrefs.SetInt("Money", money);
+        PlayerPrefs.Save();
+        moneyGO.GetComponent<TMP_Text>().text = money.ToString();
     }
 }
