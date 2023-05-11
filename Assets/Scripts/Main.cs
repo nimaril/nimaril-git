@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class Main : MonoBehaviour
     
     public void LoadSettings()
     {
+        Debug.Log("Settings");
         SceneManager.LoadScene(3);
     }
 
