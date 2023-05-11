@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class CarController : MonoBehaviour
 {
@@ -8,6 +10,10 @@ public class CarController : MonoBehaviour
     public Transform[] wheels;
     float torque = 400;
     float angle = 45;
+
+    public GameObject MainCanvas;
+    public GameObject[] packagesFrom;
+    public GameObject[] packagesInto;
 
     void Update()
     {
@@ -45,6 +51,36 @@ public class CarController : MonoBehaviour
                 }
 
             }
+        }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!MainCanvas.GetComponent<Main>().hasTask)
+        {
+            return;
+        }
+        if (!other.gameObject.name.Contains("Checkpoint"))
+        {
+            return;
+        }
+
+        if (!MainCanvas.GetComponent<Main>().isPackageTaken)
+        {
+            if (other.gameObject == MainCanvas.GetComponent<Main>().Packages[MainCanvas.GetComponent<Main>().task])
+            {
+                MainCanvas.GetComponent<Main>().isPackageTaken = true;
+                MainCanvas.GetComponent<Main>().Packages[MainCanvas.GetComponent<Main>().task].SetActive(false);
+                Debug.Log("Package Taken!");
+                //take package 3d object
+            }
+        }
+
+        if (other.gameObject == packagesInto[MainCanvas.GetComponent<Main>().task])
+        {
+            Debug.Log("REWARD");
+            MainCanvas.GetComponent<Main>().ShowReward();
+            MainCanvas.GetComponent<Main>().isPackageTaken = false;
         }
     }
 }
