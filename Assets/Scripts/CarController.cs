@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 
 public class CarController : MonoBehaviour
 {
@@ -30,7 +31,6 @@ public class CarController : MonoBehaviour
             wheel_col[i].GetWorldPose(out pos, out rot);
             wheels[i].position = pos;
             wheels[i].rotation = rot;
-
         }
 
         if (Input.anyKeyDown)
@@ -60,27 +60,32 @@ public class CarController : MonoBehaviour
         {
             return;
         }
-        if (!other.gameObject.name.Contains("Checkpoint"))
-        {
-            return;
-        }
-
+        
         if (!MainCanvas.GetComponent<Main>().isPackageTaken)
         {
-            if (other.gameObject == MainCanvas.GetComponent<Main>().Packages[MainCanvas.GetComponent<Main>().task])
+            if (other.gameObject.name.Contains("Package"))
             {
                 MainCanvas.GetComponent<Main>().isPackageTaken = true;
                 MainCanvas.GetComponent<Main>().Packages[MainCanvas.GetComponent<Main>().task].SetActive(false);
-                Debug.Log("Package Taken!");
+                ActivateCheckpoint();
                 //take package 3d object
             }
         }
 
-        if (other.gameObject == packagesInto[MainCanvas.GetComponent<Main>().task])
+        if (other.gameObject == packagesInto[MainCanvas.GetComponent<Main>().task] && MainCanvas.GetComponent<Main>().isPackageTaken)
         {
-            Debug.Log("REWARD");
+            packagesInto[MainCanvas.GetComponent<Main>().task].SetActive(false);
             MainCanvas.GetComponent<Main>().ShowReward();
             MainCanvas.GetComponent<Main>().isPackageTaken = false;
         }
+    }
+
+    private void ActivateCheckpoint()
+    {
+        for (int i = 0; i < packagesInto.Length; i++)
+        {
+            packagesInto[i].SetActive(false);
+        }
+        packagesInto[MainCanvas.GetComponent<Main>().task].SetActive(true);
     }
 }

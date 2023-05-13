@@ -36,6 +36,7 @@ public class Main : MonoBehaviour
         
         int money = PlayerPrefs.GetInt("Money", 0);
         moneyGO.GetComponent<TMP_Text>().text = money.ToString();
+        isPackageTaken = false;
     }
 
     private void SetTimeText(int seconds)
