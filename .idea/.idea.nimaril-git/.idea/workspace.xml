@@ -39,7 +39,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$PROJECT_DIR$/Builds/0.1\Nimaril.exe" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/Builds/v2\Nimaril.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="D:\Personal\Documents\UnityProjects\nimaril-git\Builds\0.1" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -102,6 +102,8 @@
       <workItem from="1683819682315" duration="5809000" />
       <workItem from="1683826377634" duration="4343000" />
       <workItem from="1683967803313" duration="2454000" />
+      <workItem from="1686379726214" duration="9000" />
+      <workItem from="1686379746582" duration="778000" />
     </task>
     <servers />
   </component>

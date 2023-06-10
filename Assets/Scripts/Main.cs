@@ -27,6 +27,7 @@ public class Main : MonoBehaviour
     private int _timer;
     public Action OnTimeOut;
     public int[] moneyRewards = { 25, 25, 20, 15, 10 };
+    public float musicVolume;
 
     public void Start()
     {
@@ -37,6 +38,9 @@ public class Main : MonoBehaviour
         int money = PlayerPrefs.GetInt("Money", 0);
         moneyGO.GetComponent<TMP_Text>().text = money.ToString();
         isPackageTaken = false;
+        
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0);
+        AudioListener.volume =  musicVolume;
     }
 
     private void SetTimeText(int seconds)
@@ -93,8 +97,7 @@ public class Main : MonoBehaviour
     public void Mute()
     {
         isMute = !isMute;
-        AudioListener.volume = isMute ? 0 : 1;
-        Debug.Log(AudioListener.volume);
+        AudioListener.volume = isMute ? 0 : musicVolume;
     }
 
     private IEnumerator CreateTask()

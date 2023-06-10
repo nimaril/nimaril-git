@@ -10,6 +10,7 @@ public class Garage : MonoBehaviour
     public GameObject car;
     public GameObject moneyGO;
     public int[] colorsCosts = { 100, 100, 100, 100, 100, 100, 100, 100 };
+    public float musicVolume;
 
     public void Start()
     {
@@ -18,6 +19,9 @@ public class Garage : MonoBehaviour
         
         int money = PlayerPrefs.GetInt("Money", 0);
         moneyGO.GetComponent<TMP_Text>().text = money.ToString();
+        
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0);
+        AudioListener.volume =  musicVolume;
     }
     
     public void Back()

@@ -7,6 +7,13 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     bool isMute = false;
+    public float musicVolume;
+
+    public void Start()
+    {
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0);
+        AudioListener.volume =  musicVolume;
+    }
 
     public void LoadGame()
     {
@@ -25,12 +32,12 @@ public class MainMenu : MonoBehaviour
     
     public void Exit()
     {
-        //
+        Application.Quit();
     }
     
     public void Mute (){
          isMute = ! isMute;
-         AudioListener.volume =  isMute ? 0 : 1;
+         AudioListener.volume =  isMute ? 0 : musicVolume;
          Debug.Log(AudioListener.volume);
     }
 }
