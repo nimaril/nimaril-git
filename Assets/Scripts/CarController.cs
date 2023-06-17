@@ -15,15 +15,40 @@ public class CarController : MonoBehaviour
     public GameObject MainCanvas;
     public GameObject[] packagesFrom;
     public GameObject[] packagesInto;
+    public bool leftButtonPressed = false;
+    public bool rightButtonPressed = false;
+    public bool gasButtonPressed = false;
+    public bool breakButtonPressed = false;
 
     void Update()
     {
         for (int i = 0; i < wheel_col.Length; i++)
         {
-            wheel_col[i].motorTorque = Input.GetAxis("Vertical") * torque;
+            if (gasButtonPressed)
+            {
+                wheel_col[i].motorTorque = 1 * torque;
+            }
+            else
+            {
+                wheel_col[i].motorTorque = 0;
+            }
+            //wheel_col[i].motorTorque = Input.GetAxis("Vertical") * torque;
             if (i == 0 || i == 1)
             {
-                wheel_col[i].steerAngle = Input.GetAxis("Horizontal") * angle;
+                if (leftButtonPressed)
+                {
+                    wheel_col[i].steerAngle = -1 * angle;
+                }
+                if (rightButtonPressed)
+                {
+                    wheel_col[i].steerAngle = angle;
+                }
+
+                if (!(leftButtonPressed || rightButtonPressed))
+                {
+                    wheel_col[i].steerAngle = 0;
+                }
+                //wheel_col[i].steerAngle = Input.GetAxis("Horizontal") * angle;
             }
 
             var pos = transform.position;
@@ -35,7 +60,7 @@ public class CarController : MonoBehaviour
 
         if (Input.anyKeyDown)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || breakButtonPressed)
             {
                 foreach (var i in wheel_col)
                 {
@@ -88,4 +113,6 @@ public class CarController : MonoBehaviour
         }
         packagesInto[MainCanvas.GetComponent<Main>().task].SetActive(true);
     }
+
+    
 }
